@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class batalhaNaval {
     // Função para incializar qualquer tabuleiro
     public static void inicializarTabuleiro(char[][] tabuleiro){
@@ -17,9 +19,44 @@ public class batalhaNaval {
             System.out.println();
         }
     }
+
+    // Função para mostrar o Menu
+    public static int menu(Scanner scanner){
+        System.out.println("============ MENU ============");
+        System.out.println("1 - Posionar navios automaticamente");
+        System.out.println("2 - Atacar oponente");
+        System.out.println("3 - Ver tabuleiro de ataques");
+        System.out.println("4 - Ver rodadas restantes");
+        System.out.println("5 - Sair do jogo");
+        System.out.println("=============================");
+        return scanner.nextInt();
+        /*switch (opcao) {
+            case 1:
+                posicionaNavio();
+                break;
+
+            case 2:
+                atacarOponente();
+                break;
+            case 3:
+                verTabuleiroAtac();
+                break;
+            case 4:
+                verRodadasRest();
+                break;
+            case 5:
+                sairDoJogo();
+                break;
+            default:
+            System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
+                break;
+        } Esse switch-case ficará dentro do loop principal do jogo na main*/
+    }
     
     public static void main(String[] args) throws Exception {
-        // String tabuleiro[][] = new String[8][8]; Cria um tabuleiro 8x8
+        Scanner scanner = new Scanner(System.in);
+        
+        // char tabuleiro[][] = new char[8][8]; Cria um tabuleiro 8x8
         // Criar tabuleiros
         char tabuleiroDef01[][] = new char[8][8]; //Tabuleiro de defesa do jogador 01
         char tabuleiroAtac01[][] = new char[8][8]; //Tabuleiro de ataque do jogador 01
@@ -32,6 +69,7 @@ public class batalhaNaval {
         inicializarTabuleiro(tabuleiroAtac02);
         inicializarTabuleiro(tabuleiroDef02);
 
+        menu(scanner);
         // Imprime os tabuleiros
         System.out.println("--- Tabuleiro de Defesa 01 ---");
         imprimirTabuleiro(tabuleiroDef01);
@@ -41,5 +79,8 @@ public class batalhaNaval {
         imprimirTabuleiro(tabuleiroDef02);
         System.out.println("\n--- Tabuleiro de Ataque 02 ---");
         imprimirTabuleiro(tabuleiroAtac02);
+
+
+        scanner.close();
     }
 }
