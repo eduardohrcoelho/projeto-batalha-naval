@@ -6,13 +6,23 @@ public class batalhaNaval {
         // Preenche o tabuleiro com "~"
         for(int i=0; i < tabuleiro.length; i++){
             for(int j=0; j < tabuleiro[i].length; j++){
-                tabuleiro[i][j] = '~';
+                tabuleiro[i][j] = '~'; 
             }
         }
     }
     // Função para imprimir qualquer tabuleiro
     public static void imprimirTabuleiro(char[][] tabuleiro){
-        for(int i=0; i < tabuleiro.length; i++){
+        for(int i = 0; i <= 8; i++){
+            if(i == 0 ){
+                System.out.print("  ");
+            }else{
+                System.out.print(i + " "); // Imprime os números das colunas em linha de 0 a 8
+            }
+            
+        }System.out.println();
+        
+        for(int i=0; i < tabuleiro.length; i++){ // Esse "for" imprime o tabuleiro já preenchido e da um espaço entre as linhas
+            System.out.print((char)('A' + i) + " "); // Toda vez que descer uma linha vai imprimir uma letra, 'A' + i(1) = 'B'...
             for(int j=0; j < tabuleiro[i].length; j++){
                 System.out.print(tabuleiro[i][j] + " ");
             }
@@ -30,27 +40,14 @@ public class batalhaNaval {
         System.out.println("5 - Sair do jogo");
         System.out.println("=============================");
         return scanner.nextInt();
-        /*switch (opcao) {
-            case 1:
-                posicionaNavio();
-                break;
-
-            case 2:
-                atacarOponente();
-                break;
-            case 3:
-                verTabuleiroAtac();
-                break;
-            case 4:
-                verRodadasRest();
-                break;
-            case 5:
-                sairDoJogo();
-                break;
-            default:
-            System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
-                break;
-        } Esse switch-case ficará dentro do loop principal do jogo na main*/
+        /*switch (scanner) {
+            case 1 -> posicionaNavio();
+            case 2 -> atacarOponente();
+            case 3 -> verTabuleiroAtac();
+            case 4 -> verRodadasRest();
+            case 5 -> sairDoJogo();
+            default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
+        } Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
     }
     
     public static void main(String[] args) throws Exception {
@@ -63,23 +60,39 @@ public class batalhaNaval {
         char tabuleiroDef02[][] = new char[8][8]; //Tabuleiro de defesa do jogador 02
         char tabuleiroAtac02[][] = new char[8][8]; //Tabuleiro de ataque do jogador 02
 
+        int contRodada = 1;
+        final int maxRodadas = 5;
+
         // Inicialização dos tabuleiros usando a função inicializarTabuleiro
         inicializarTabuleiro(tabuleiroAtac01);
         inicializarTabuleiro(tabuleiroDef01);
         inicializarTabuleiro(tabuleiroAtac02);
         inicializarTabuleiro(tabuleiroDef02);
 
+        System.out.println(">>> BEM-VINDO AO BATALHA NAVAL <<<");
+        System.out.println("Pressione a tecla Enter para iniciar uma partida...");
+        scanner.nextLine();
+        System.out.println("Jogador 1, escolha uma opção: ");
+        menu(scanner); // Menu antes da partida começar mostrar só posicionar navios ou sair do jogo
+        System.out.println("Jogador 2, escolha uma opção: ");
         menu(scanner);
+        System.out.println("O jogo vai começar!");
+
+        while(contRodada <= maxRodadas){
+            System.out.println("-- " + contRodada + "ª Rodada --");
+            imprimirTabuleiro(tabuleiroAtac02);
+            contRodada++;
+        }
+
         // Imprime os tabuleiros
-        System.out.println("--- Tabuleiro de Defesa 01 ---");
+        /*System.out.println("--- Tabuleiro de Defesa 01 ---");
         imprimirTabuleiro(tabuleiroDef01);
         System.out.println("\n--- Tabuleiro de Ataque 01 ---");
         imprimirTabuleiro(tabuleiroAtac01);
         System.out.println("\n--- Tabuleiro de Defesa 02 ---");
         imprimirTabuleiro(tabuleiroDef02);
         System.out.println("\n--- Tabuleiro de Ataque 02 ---");
-        imprimirTabuleiro(tabuleiroAtac02);
-
+        imprimirTabuleiro(tabuleiroAtac02);*/
 
         scanner.close();
     }
