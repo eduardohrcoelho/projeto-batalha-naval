@@ -12,17 +12,7 @@ public class batalhaNaval {
     }
     // Função para imprimir qualquer tabuleiro
     public static void imprimirTabuleiro(char[][] tabuleiro){
-        for(int i = 0; i <= 8; i++){
-            if(i == 0 ){
-                System.out.print("  ");
-            }else{
-                System.out.print(i + " "); // Imprime os números das colunas em linha de 0 a 8
-            }
-            
-        }System.out.println();
-        
         for(int i=0; i < tabuleiro.length; i++){ // Esse "for" imprime o tabuleiro já preenchido e da um espaço entre as linhas
-            System.out.print((char)('A' + i) + " "); // Toda vez que descer uma linha vai imprimir uma letra, 'A' + i(1) = 'B'...
             for(int j=0; j < tabuleiro[i].length; j++){
                 System.out.print(tabuleiro[i][j] + " ");
             }
@@ -49,6 +39,21 @@ public class batalhaNaval {
             default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
         } Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
     }
+
+    public static int [] atacarOponente(){
+        Scanner scanner = new Scanner(System.in);
+        
+        int linhaAtac;
+        int colunaAtac;
+        
+        System.out.println("Qual linha deseja atacar: ");
+        linhaAtac = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Qual coluna deseja atacar: ");
+        colunaAtac = scanner.nextInt();
+        scanner.close();
+        return new int[]{linhaAtac, colunaAtac};
+    }
     
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
@@ -69,13 +74,14 @@ public class batalhaNaval {
         inicializarTabuleiro(tabuleiroAtac02);
         inicializarTabuleiro(tabuleiroDef02);
 
-        System.out.println(">>> BEM-VINDO AO BATALHA NAVAL <<<");
+        System.out.println(">>> BEM-VINDO A BATALHA NAVAL <<<");
         System.out.println("Pressione a tecla Enter para iniciar uma partida...");
         scanner.nextLine();
         System.out.println("Jogador 1, escolha uma opção: ");
         menu(scanner); // Menu antes da partida começar mostrar só posicionar navios ou sair do jogo
         System.out.println("Jogador 2, escolha uma opção: ");
         menu(scanner);
+        atacarOponente();
         System.out.println("O jogo vai começar!");
 
         while(contRodada <= maxRodadas){
