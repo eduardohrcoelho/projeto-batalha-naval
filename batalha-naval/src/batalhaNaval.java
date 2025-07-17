@@ -40,19 +40,30 @@ public class batalhaNaval {
         } Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
     }
 
-    public static int [] atacarOponente(){
-        Scanner scanner = new Scanner(System.in);
+    public static boolean atacarOponente(Scanner scanner, char[][] tabuleiroDef, char[][] tabuleiroAtac){        
+        int linha = -1; // Evita que a linha comece com uma coordenada válida
+        int coluna = -1; // Evita que a coluna comece com uma coordenada válida
+        boolean entradaValida = false; // Valor booleano que controla o loop até tornar true
+
+        do{
+            System.out.println("Informe a Linha que deseja atacar (0 a 7): ");
+            linha = scanner.nextInt();
+            System.out.println("Informe a Coluna que deseja atacar (0 a 7): ");
+            coluna = scanner.nextInt();
+            if(linha >= 0 && linha <= 7 && coluna >=0 && coluna <= 7){
+                if(tabuleiroAtac[linha][coluna] == '~'){
+                    entradaValida = true;
+                }else{
+                    System.out.println("Coordenada já atacada! Escolha outra posição.");
+                }
+            }else{               
+                System.out.println("Coordenadas inválidas! Por favor digite linhas e colunas dentro do intervalo de 0 a 7.");
+            }
+        }while(entradaValida != true); // Loop que verifica se a entrada das coordenadas são válidas
         
-        int linhaAtac;
-        int colunaAtac;
-        
-        System.out.println("Qual linha deseja atacar: ");
-        linhaAtac = scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Qual coluna deseja atacar: ");
-        colunaAtac = scanner.nextInt();
-        scanner.close();
-        return new int[]{linhaAtac, colunaAtac};
+
+
+        return entradaValida;
     }
     
     public static void main(String[] args) throws Exception {
@@ -67,6 +78,8 @@ public class batalhaNaval {
 
         int contRodada = 1;
         final int maxRodadas = 5;
+        int linhaAtac = 0;
+        int colunaAtac = 0;
 
         // Inicialização dos tabuleiros usando a função inicializarTabuleiro
         inicializarTabuleiro(tabuleiroAtac01);
@@ -81,7 +94,6 @@ public class batalhaNaval {
         menu(scanner); // Menu antes da partida começar mostrar só posicionar navios ou sair do jogo
         System.out.println("Jogador 2, escolha uma opção: ");
         menu(scanner);
-        atacarOponente();
         System.out.println("O jogo vai começar!");
 
         while(contRodada <= maxRodadas){
