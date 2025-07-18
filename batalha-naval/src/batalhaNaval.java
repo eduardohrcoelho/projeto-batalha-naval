@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 public class batalhaNaval {
@@ -29,15 +30,70 @@ public class batalhaNaval {
         System.out.println("4 - Ver rodadas restantes");
         System.out.println("5 - Sair do jogo");
         System.out.println("=============================");
-        return scanner.nextInt();
+        scanner.nextInt();
         /*switch (scanner) {
-            case 1 -> posicionaNavio();
+            case 1 -> posicionaNavioGrande();
             case 2 -> atacarOponente();
             case 3 -> verTabuleiroAtac();
             case 4 -> verRodadasRest();
             case 5 -> sairDoJogo();
             default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
-        } Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
+        } //Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
+        return scanner.nextInt();
+    }
+
+    public static void posicionaNavioGrande(char[][] tabuleiro){     
+        int sentido = 0;
+        int direcao = 0;
+        int salvaLg = 0;
+        int salvaCg = 0;
+        Random rand = new Random();
+        int linhaG = 0;
+        int colunaG = 0;
+        
+        int hor = 1; // 1 significa que os barcos serão colocados na horizontal.
+        int ver = 2; // 2 significa que os barcos serão colocados na vertical.
+
+        linhaG = rand.nextInt(8); // Gera um valor aleatório para linha.
+        salvaLg = linhaG; // salva o valor aleatório de linha.
+        colunaG = rand.nextInt(8); // Gera um valor aleatório para coluna.
+        salvaCg = colunaG; // salva o valor aleatório de coluna.
+        direcao = rand.nextInt(ver - hor + 1) + 1; // manipulação para gerar a direção(1- Horizontal/ 2- vertical)
+        sentido = rand.nextInt(2) * 2 - 1; // -1 -> Esquerda / 1 -> Direita.
+        int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condições
+                         // específicas.
+        for (int cont = 1; cont <= 3; cont++) {
+            switch (direcao) {
+                case 1: // horizontal
+                    if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaCg += 1; // Coluna anda 1 casa
+                    } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na
+                                                                   // horizontal
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaCg -= 1; // Coluna retrocede 1 casa
+                    } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
+                                      // informação está gravada na variável "y"
+                    }
+                    break;
+                case 2: // vertical
+                    if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaLg += 1;
+                    } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na
+                                                                 // vertical
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaLg -= 1;
+                    } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                        tabuleiro[salvaLg][salvaCg] = 'x';
+                        salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
+                                      // informação está gravada na variável "y"
+                    }
+                    break;
+            }
+        }
     }
 
     public static boolean atacarOponente(Scanner scanner, char[][] tabuleiroDef, char[][] tabuleiroAtac){        
@@ -87,6 +143,11 @@ public class batalhaNaval {
         inicializarTabuleiro(tabuleiroAtac02);
         inicializarTabuleiro(tabuleiroDef02);
 
+
+        imprimirTabuleiro(tabuleiroAtac01);
+        System.out.println("=============");
+        posicionaNavioGrande(tabuleiroAtac01);
+        imprimirTabuleiro(tabuleiroAtac01);
         System.out.println(">>> BEM-VINDO A BATALHA NAVAL <<<");
         System.out.println("Pressione a tecla Enter para iniciar uma partida...");
         scanner.nextLine();
@@ -96,11 +157,11 @@ public class batalhaNaval {
         menu(scanner);
         System.out.println("O jogo vai começar!");
 
-        while(contRodada <= maxRodadas){
-            System.out.println("-- " + contRodada + "ª Rodada --");
-            imprimirTabuleiro(tabuleiroAtac02);
-            contRodada++;
-        }
+        // while(contRodada <= maxRodadas){
+        //     System.out.println("-- " + contRodada + "ª Rodada --");
+        //     imprimirTabuleiro(tabuleiroAtac02);
+        //     contRodada++;
+        // }
 
         // Imprime os tabuleiros
         /*System.out.println("--- Tabuleiro de Defesa 01 ---");
