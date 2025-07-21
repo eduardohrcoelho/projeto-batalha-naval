@@ -42,7 +42,16 @@ public class batalhaNaval {
         return scanner.nextInt();
     }
 
-    public static void posicionaNavioGrande(char[][] tabuleiro){     
+    public static int tamanhoNavio(){
+        Random rand = new Random();
+        
+        int tamanhoNavio = rand.nextInt(2)+1;
+
+        return tamanhoNavio;
+    }
+
+
+    public static void posicionaNavioGrande(char[][] tabuleiro, int tamanhoNavio){     
         int sentido = 0;
         int direcao = 0;
         int salvaLg = 0;
@@ -50,7 +59,7 @@ public class batalhaNaval {
         Random rand = new Random();
         int linhaG = 0;
         int colunaG = 0;
-        
+        // random para tamanho do navio
         int hor = 1; // 1 significa que os barcos serão colocados na horizontal.
         int ver = 2; // 2 significa que os barcos serão colocados na vertical.
 
@@ -62,7 +71,10 @@ public class batalhaNaval {
         sentido = rand.nextInt(2) * 2 - 1; // -1 -> Esquerda / 1 -> Direita.
         int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condições
                          // específicas.
-        for (int cont = 1; cont <= 3; cont++) {
+
+
+        if(tamanhoNavio == 3){
+            for (int cont = 1; cont <= 3; cont++) {
             switch (direcao) {
                 case 1: // horizontal
                     if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
@@ -92,8 +104,49 @@ public class batalhaNaval {
                                       // informação está gravada na variável "y"
                     }
                     break;
+                }continue;
+            }
+        }else if(tamanhoNavio == 2){
+            for (int cont = 1; cont <= 2; cont++) {
+                switch (direcao) {
+                    case 1: // horizontal
+                        if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaCg += 1; // Coluna anda 1 casa
+                        } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na
+                                                                    // horizontal
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaCg -= 1; // Coluna retrocede 1 casa
+                        } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
+                                        // informação está gravada na variável "y"
+                        }
+                        break;
+                    case 2: // vertical
+                        if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaLg += 1;
+                        } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na
+                                                                    // vertical
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaLg -= 1;
+                        } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                            tabuleiro[salvaLg][salvaCg] = '*';
+                            salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
+                                        // informação está gravada na variável "y"
+                        }
+                        break;
+                }continue;
+            }
+        }else{
+            for (int cont = 0; cont < 3; cont++) {
+                linhaG = rand.nextInt(8);
+                colunaG = rand.nextInt(8);
+                tabuleiro[linhaG][colunaG] = '%';
             }
         }
+        
     }
 
     public static boolean atacarOponente(Scanner scanner, char[][] tabuleiroDef, char[][] tabuleiroAtac){        
@@ -146,7 +199,7 @@ public class batalhaNaval {
 
         imprimirTabuleiro(tabuleiroAtac01);
         System.out.println("=============");
-        posicionaNavioGrande(tabuleiroAtac01);
+        posicionaNavioGrande(tabuleiroAtac01, tamanhoNavio());
         imprimirTabuleiro(tabuleiroAtac01);
         System.out.println(">>> BEM-VINDO A BATALHA NAVAL <<<");
         System.out.println("Pressione a tecla Enter para iniciar uma partida...");
