@@ -42,16 +42,7 @@ public class batalhaNaval {
         return scanner.nextInt();
     }
 
-    public static int tamanhoNavio(){
-        Random rand = new Random();
-        
-        int tamanhoNavio = rand.nextInt(2)+1;
-
-        return tamanhoNavio;
-    }
-
-
-    public static void posicionaNavioGrande(char[][] tabuleiro, int tamanhoNavio){     
+    public static void posicionaNavios(char[][] tabuleiro){     
         int sentido = 0;
         int direcao = 0;
         int salvaLg = 0;
@@ -59,7 +50,7 @@ public class batalhaNaval {
         Random rand = new Random();
         int linhaG = 0;
         int colunaG = 0;
-        // random para tamanho do navio
+
         int hor = 1; // 1 significa que os barcos serão colocados na horizontal.
         int ver = 2; // 2 significa que os barcos serão colocados na vertical.
 
@@ -69,84 +60,101 @@ public class batalhaNaval {
         salvaCg = colunaG; // salva o valor aleatório de coluna.
         direcao = rand.nextInt(ver - hor + 1) + 1; // manipulação para gerar a direção(1- Horizontal/ 2- vertical)
         sentido = rand.nextInt(2) * 2 - 1; // -1 -> Esquerda / 1 -> Direita.
-        int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condições
-                         // específicas.
+        int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condiçõesespecíficas.
 
 
-        if(tamanhoNavio == 3){
-            for (int cont = 1; cont <= 3; cont++) {
-            switch (direcao) {
-                case 1: // horizontal
-                    if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaCg += 1; // Coluna anda 1 casa
-                    } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na
-                                                                   // horizontal
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaCg -= 1; // Coluna retrocede 1 casa
-                    } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
-                                      // informação está gravada na variável "y"
+        for(int tamanhoNavio = 3; tamanhoNavio >= 1; tamanhoNavio--){
+            if(tamanhoNavio == 3){
+                for (int cont = 1; cont <= 3; cont++) {
+                    switch (direcao) {
+                        case 1: // horizontal
+                            if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaCg += 1; // Coluna anda 1 casa
+                            } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na horizontal
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaCg -= 1; // Coluna retrocede 1 casa
+                            } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
+                            }
+                            break;
+                        case 2: // vertical
+                            if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaLg += 1;
+                            } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na vertical
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaLg -= 1;
+                            } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
+                            }
+                            break;
+                    }continue;
+                }
+            }else if(tamanhoNavio == 2){
+                for (int i = 0; i < 2; i++){
+                    linhaG = rand.nextInt(8);
+                    colunaG = rand.nextInt(8);
+                    direcao = rand.nextInt(ver - hor + 1) + 1;
+                    sentido = rand.nextInt(2) * 2 - 1;
+                    for (int cont = 0; cont < 2; cont++) {
+                                    switch (direcao) {
+                                        case 1: // horizontal
+                                            if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
+                                                if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG + 1] == '~'){
+                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    colunaG += 1; // Coluna anda 1 casa
+                                                }
+                                            } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na horizontal
+                                                if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG - 1] == '~'){
+                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    colunaG -= 1; // Coluna anda 1 casa
+                                                }
+                                            } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                                                if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG + sentido] == '~'){
+                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    colunaG += sentido; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
+                                                }
+                                            }
+                                            break;
+                                        case 2: // vertical
+                                            if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
+                                                    if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG + 1][colunaG] == '~'){
+                                                        tabuleiro[linhaG][colunaG] = '*';
+                                                        linhaG += 1;
+                                                    }
+                                            } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na vertical                     
+                                                if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG - 1][colunaG] == '~'){
+                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    linhaG -= 1;
+                                                }
+                                            } else { // Quando não se encaixa em nenhum dos problemas anteriores.
+                                                if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG + sentido][colunaG] == '~'){
+                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    linhaG += sentido;
+                                                }
+                                                 // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"        
+                                            }
+                                        break;
+                                    }
                     }
-                    break;
-                case 2: // vertical
-                    if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaLg += 1;
-                    } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na
-                                                                 // vertical
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaLg -= 1;
-                    } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                        tabuleiro[salvaLg][salvaCg] = 'x';
-                        salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
-                                      // informação está gravada na variável "y"
+                }
+            }else{ 
+                for (int cont = 0; cont < 3; cont++) {
+                    linhaG = rand.nextInt(8);
+                    colunaG = rand.nextInt(8);
+                    for(int i=0; i < tabuleiro.length; i++){
+                        for(int j=0; j < tabuleiro[i].length; j++){
+                            if(tabuleiro[linhaG][colunaG] == '~'){
+                                tabuleiro[linhaG][colunaG] = '%';
+                            }
+                        }
                     }
-                    break;
-                }continue;
-            }
-        }else if(tamanhoNavio == 2){
-            for (int cont = 1; cont <= 2; cont++) {
-                switch (direcao) {
-                    case 1: // horizontal
-                        if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaCg += 1; // Coluna anda 1 casa
-                        } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na
-                                                                    // horizontal
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaCg -= 1; // Coluna retrocede 1 casa
-                        } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
-                                        // informação está gravada na variável "y"
-                        }
-                        break;
-                    case 2: // vertical
-                        if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaLg += 1;
-                        } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na
-                                                                    // vertical
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaLg -= 1;
-                        } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                            tabuleiro[salvaLg][salvaCg] = '*';
-                            salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja
-                                        // informação está gravada na variável "y"
-                        }
-                        break;
-                }continue;
-            }
-        }else{
-            for (int cont = 0; cont < 3; cont++) {
-                linhaG = rand.nextInt(8);
-                colunaG = rand.nextInt(8);
-                tabuleiro[linhaG][colunaG] = '%';
+                }break;
             }
         }
-        
     }
 
     public static boolean atacarOponente(Scanner scanner, char[][] tabuleiroDef, char[][] tabuleiroAtac){        
@@ -185,10 +193,10 @@ public class batalhaNaval {
         char tabuleiroDef02[][] = new char[8][8]; //Tabuleiro de defesa do jogador 02
         char tabuleiroAtac02[][] = new char[8][8]; //Tabuleiro de ataque do jogador 02
 
-        int contRodada = 1;
+        /*int contRodada = 1;
         final int maxRodadas = 5;
         int linhaAtac = 0;
-        int colunaAtac = 0;
+        int colunaAtac = 0;*/
 
         // Inicialização dos tabuleiros usando a função inicializarTabuleiro
         inicializarTabuleiro(tabuleiroAtac01);
@@ -199,7 +207,7 @@ public class batalhaNaval {
 
         imprimirTabuleiro(tabuleiroAtac01);
         System.out.println("=============");
-        posicionaNavioGrande(tabuleiroAtac01, tamanhoNavio());
+        posicionaNavios(tabuleiroAtac01);
         imprimirTabuleiro(tabuleiroAtac01);
         System.out.println(">>> BEM-VINDO A BATALHA NAVAL <<<");
         System.out.println("Pressione a tecla Enter para iniciar uma partida...");
