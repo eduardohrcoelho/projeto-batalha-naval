@@ -22,27 +22,28 @@ public class batalhaNaval {
     }
 
     // Função para mostrar o Menu
-    public static int menu(Scanner scanner){
-        System.out.println("============ MENU ============");
-        System.out.println("1 - Posionar navios automaticamente");
-        System.out.println("2 - Atacar oponente");
-        System.out.println("3 - Ver tabuleiro de ataques");
-        System.out.println("4 - Ver rodadas restantes");
-        System.out.println("5 - Sair do jogo");
-        System.out.println("=============================");
-        scanner.nextInt();
-        /*switch (scanner) {
-            case 1 -> posicionaNavioGrande();
-            case 2 -> atacarOponente();
-            case 3 -> verTabuleiroAtac();
-            case 4 -> verRodadasRest();
-            case 5 -> sairDoJogo();
-            default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
-        } //Esse switch-case ficará dentro do loop principal do jogo na main (Função switch-case)*/
-        return scanner.nextInt();
+    public static int menu(Scanner scanner, boolean jogoComecou){
+        if(jogoComecou == false){
+            System.out.println("============ MENU ============");
+            System.out.println("1 - Posionar navios automaticamente");
+            System.out.println("5 - Sair do jogo");
+            System.out.println("=============================");
+        }else{
+            System.out.println("============ MENU ============");
+            System.out.println("2 - Atacar oponente");
+            System.out.println("3 - Ver tabuleiro de ataque");
+            System.out.println("4 - Ver rodadas restantes");
+            System.out.println("5 - Sair do jogo");
+            System.out.println("=============================");
+        }
+        
+        int opcao = scanner.nextInt();
+
+        return opcao;
     }
 
     public static void posicionaNavios(char[][] tabuleiro){     
+        
         int sentido = 0;
         int direcao = 0;
         int salvaLg = 0;
@@ -60,8 +61,7 @@ public class batalhaNaval {
         salvaCg = colunaG; // salva o valor aleatório de coluna.
         direcao = rand.nextInt(ver - hor + 1) + 1; // manipulação para gerar a direção(1- Horizontal/ 2- vertical)
         sentido = rand.nextInt(2) * 2 - 1; // -1 -> Esquerda / 1 -> Direita.
-        int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condiçõesespecíficas.
-
+        int y = sentido; // Serve para andar para esquerda/direita nos elses que não possuem condições específicas.
 
         for(int tamanhoNavio = 3; tamanhoNavio >= 1; tamanhoNavio--){
             if(tamanhoNavio == 3){
@@ -69,29 +69,29 @@ public class batalhaNaval {
                     switch (direcao) {
                         case 1: // horizontal
                             if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaCg += 1; // Coluna anda 1 casa
                             } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na horizontal
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaCg -= 1; // Coluna retrocede 1 casa
                             } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaCg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
                             }
                             break;
                         case 2: // vertical
                             if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaLg += 1;
                             } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na vertical
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaLg -= 1;
                             } else { // Quando não se encaixa em nenhum dos problemas anteriores.
-                                tabuleiro[salvaLg][salvaCg] = 'x';
+                                tabuleiro[salvaLg][salvaCg] = '#';
                                 salvaLg += y; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
                             }
                             break;
-                    }continue;
+                    }
                 }
             }else if(tamanhoNavio == 2){
                 for (int i = 0; i < 2; i++){
@@ -104,17 +104,19 @@ public class batalhaNaval {
                                         case 1: // horizontal
                                             if ((colunaG == 1) || (colunaG == 0)) { // Problema 1 dos limites das bordas quando é na horizontal
                                                 if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG + 1] == '~'){
-                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    tabuleiro[linhaG][colunaG] = '#';
                                                     colunaG += 1; // Coluna anda 1 casa
-                                                }
+                                                }else{
+                                                    cont = -1;
+                                                }continue;
                                             } else if ((colunaG == 6) || (colunaG == 7)) { // Problema 2 dos limites das bordas quando é na horizontal
                                                 if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG - 1] == '~'){
-                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    tabuleiro[linhaG][colunaG] = '#';
                                                     colunaG -= 1; // Coluna anda 1 casa
                                                 }
                                             } else { // Quando não se encaixa em nenhum dos problemas anteriores.
                                                 if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG][colunaG + sentido] == '~'){
-                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    tabuleiro[linhaG][colunaG] = '#';
                                                     colunaG += sentido; // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"
                                                 }
                                             }
@@ -122,17 +124,17 @@ public class batalhaNaval {
                                         case 2: // vertical
                                             if ((linhaG == 0) || (linhaG == 1)) { // Problema 1 dos limites das bordas quando é na vertical
                                                     if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG + 1][colunaG] == '~'){
-                                                        tabuleiro[linhaG][colunaG] = '*';
+                                                        tabuleiro[linhaG][colunaG] = '#';
                                                         linhaG += 1;
                                                     }
                                             } else if ((linhaG == 7) || (linhaG == 6)) { // Problema 2 dos limites das bordas quando é na vertical                     
                                                 if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG - 1][colunaG] == '~'){
-                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    tabuleiro[linhaG][colunaG] = '#';
                                                     linhaG -= 1;
                                                 }
                                             } else { // Quando não se encaixa em nenhum dos problemas anteriores.
                                                 if(tabuleiro[linhaG][colunaG] == '~' && tabuleiro[linhaG + sentido][colunaG] == '~'){
-                                                    tabuleiro[linhaG][colunaG] = '*';
+                                                    tabuleiro[linhaG][colunaG] = '#';
                                                     linhaG += sentido;
                                                 }
                                                  // Como não há limitação das bordas, pode andar para esquerda ou direita, cuja informação está gravada na variável "y"        
@@ -148,7 +150,7 @@ public class batalhaNaval {
                     for(int i=0; i < tabuleiro.length; i++){
                         for(int j=0; j < tabuleiro[i].length; j++){
                             if(tabuleiro[linhaG][colunaG] == '~'){
-                                tabuleiro[linhaG][colunaG] = '%';
+                                tabuleiro[linhaG][colunaG] = '#';
                             }
                         }
                     }
@@ -178,9 +180,15 @@ public class batalhaNaval {
             }
         }while(entradaValida != true); // Loop que verifica se a entrada das coordenadas são válidas
         
-
-
-        return entradaValida;
+        if(tabuleiroDef[linha][coluna] == '#'){
+            tabuleiroAtac[linha][coluna] = 'X';
+            System.out.println("Acertou em cheio!");
+            return true;
+        }else{
+            tabuleiroAtac[linha][coluna] = 'O';
+            System.out.println("Errou!");
+            return false;
+        }
     }
     
     public static void main(String[] args) throws Exception {
@@ -193,46 +201,72 @@ public class batalhaNaval {
         char tabuleiroDef02[][] = new char[8][8]; //Tabuleiro de defesa do jogador 02
         char tabuleiroAtac02[][] = new char[8][8]; //Tabuleiro de ataque do jogador 02
 
-        /*int contRodada = 1;
-        final int maxRodadas = 5;
-        int linhaAtac = 0;
-        int colunaAtac = 0;*/
+        int contRodada = 1;
+        final int MAX_ROD = 5;
+        int opcao = 0;
+        boolean jogoComecou = false;
+        boolean jogoAtivo = true;
+        int pontosJ01 = 0;
+        int pontosJ02 = 0;
+        int jogadorAtual = 1;
 
         // Inicialização dos tabuleiros usando a função inicializarTabuleiro
         inicializarTabuleiro(tabuleiroAtac01);
         inicializarTabuleiro(tabuleiroDef01);
         inicializarTabuleiro(tabuleiroAtac02);
         inicializarTabuleiro(tabuleiroDef02);
-
-
-        imprimirTabuleiro(tabuleiroAtac01);
-        System.out.println("=============");
-        posicionaNavios(tabuleiroAtac01);
-        imprimirTabuleiro(tabuleiroAtac01);
+        
         System.out.println(">>> BEM-VINDO A BATALHA NAVAL <<<");
         System.out.println("Pressione a tecla Enter para iniciar uma partida...");
         scanner.nextLine();
+        System.out.println("=============");
         System.out.println("Jogador 1, escolha uma opção: ");
-        menu(scanner); // Menu antes da partida começar mostrar só posicionar navios ou sair do jogo
+        opcao = menu(scanner, jogoComecou); // Menu antes da partida começar mostrar só posicionar navios ou sair do jogo
+        switch (opcao) {
+            case 1 -> posicionaNavios(tabuleiroDef01);
+            //case 5 -> sairDoJogo();
+            default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
+        } 
         System.out.println("Jogador 2, escolha uma opção: ");
-        menu(scanner);
+        menu(scanner, jogoComecou);
+        switch (opcao) {
+            case 1 -> posicionaNavios(tabuleiroDef02);
+            //case 5 -> sairDoJogo();
+            default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
+        } 
         System.out.println("O jogo vai começar!");
+        
+        // Loop principal do jogo: 
+        while (jogoAtivo && contRodada <= MAX_ROD){
+            char[][] tabuleiroDefOp;
+            char[][] tabuleiroAtacAtual;
+            jogoComecou = true;
+            
+            if(jogadorAtual == 1){
+                tabuleiroDefOp = tabuleiroDef02;
+                tabuleiroAtacAtual = tabuleiroAtac01; 
+            }else{
+                tabuleiroDefOp = tabuleiroDef01;
+                tabuleiroAtacAtual = tabuleiroAtac02; 
+            }
+            opcao = menu(scanner, jogoComecou);
+            switch (opcao) {
+                case 2 -> atacarOponente(scanner, tabuleiroDefOp, tabuleiroAtacAtual);
+                case 3 -> imprimirTabuleiro(tabuleiroAtacAtual);
+                // case 4 -> verRodadasRest();
+                // case 5 -> sairDoJogo();
+                default -> System.out.println("Opção inválida! Por favor, escolha um número de 1 a 5.");
+            }
+            imprimirTabuleiro(tabuleiroAtacAtual);
+        }
 
-        // while(contRodada <= maxRodadas){
-        //     System.out.println("-- " + contRodada + "ª Rodada --");
-        //     imprimirTabuleiro(tabuleiroAtac02);
-        //     contRodada++;
-        // }
-
-        // Imprime os tabuleiros
-        /*System.out.println("--- Tabuleiro de Defesa 01 ---");
         imprimirTabuleiro(tabuleiroDef01);
-        System.out.println("\n--- Tabuleiro de Ataque 01 ---");
+        System.out.println("=============");
+        posicionaNavios(tabuleiroDef01);
+        imprimirTabuleiro(tabuleiroDef01);
+        System.out.println("\n===========\n");
+        atacarOponente(scanner, tabuleiroDef01, tabuleiroAtac01);
         imprimirTabuleiro(tabuleiroAtac01);
-        System.out.println("\n--- Tabuleiro de Defesa 02 ---");
-        imprimirTabuleiro(tabuleiroDef02);
-        System.out.println("\n--- Tabuleiro de Ataque 02 ---");
-        imprimirTabuleiro(tabuleiroAtac02);*/
 
         scanner.close();
     }
